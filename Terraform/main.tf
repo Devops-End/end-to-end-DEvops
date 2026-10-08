@@ -3,6 +3,7 @@ resource "azurerm_resource_group" "rg" {
   location = "East US"
 }
 
+# vnet 12
 resource "azurerm_virtual_network" "vnet" {
   name                = "terraform-vnet"
   location            = azurerm_resource_group.rg.location

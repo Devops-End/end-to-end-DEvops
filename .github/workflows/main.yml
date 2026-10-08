@@ -56,7 +56,7 @@ jobs:
       name: Terraform Apply
       needs: terraform
       runs-on: ubuntu-latest
-      environment: production
+      environment: Approval
 
       steps:
         - name: Checkout code

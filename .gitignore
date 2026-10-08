@@ -4,4 +4,5 @@
 *.tfstate.*
 crash.log
 crash.*.log
+backend
 EOF

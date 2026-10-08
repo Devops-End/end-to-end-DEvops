@@ -30,10 +30,16 @@ jobs:
           terraform_version: 1.9.8
 
       - name: Terraform Init
-        run: terraform init
+        run: |
+          cd Terraform
+          terraform init
 
       - name: Terraform Validate
-        run: terraform validate
+        run: |
+          cd Terraform
+          terraform validate
       
       - name: Terraform plan
-        run: terraform plan -out=tfplan
+        run: |
+          cd Terraform
+          terraform plan -out=tfplan

@@ -155,9 +155,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
     azurerm_network_interface.nic.id
   ]
 
-  admin_ssh_key {
-    username   = "azureuser"
-    public_key = "SystemAssigned"
+  identity {
+    type = "SystemAssigned"
   }
 
   os_disk {

@@ -4,7 +4,10 @@ on:
     push:
         branches:
             - main
-
+        paths:
+            - 'app.py'
+            - 'Dockerfile'
+            - 'requirements.txt'
 permissions:
     contents: read
     id-token: write
@@ -38,4 +41,4 @@ jobs:
               uses: azure/webapps-deploy@v2
               with:
                 app-name: ${{ vars.APP_NAME }}
-                images: ${{ vars.REGISTRY_server }}/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+                images: ${{ vars.REGISTRY_SERVER }}/${{ vars.IMAGE_NAME }}:${{ github.sha }}

@@ -1,0 +1,6 @@
+- name: Configure runner VM
+  hosts: localhost
+  connection: local
+  become: true
+  roles:
+    - docker

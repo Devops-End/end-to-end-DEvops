@@ -1,0 +1,66 @@
+- name: Create runner user
+  ansible.builtin.user:
+    name: runner
+    shell: /bin/bash
+    groups: docker
+    append: true
+    create_home: true
+
+- name: Get latest runner release
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/actions/runner/releases/latest
+    return_content: true
+  register: runner_release
+
+- name: Set runner version
+  ansible.builtin.set_fact:
+    runner_version: "{{ runner_release.json.tag_name | regex_replace('^v', '') }}"
+
+- name: Create runner directory
+  ansible.builtin.file:
+    path: /home/runner/actions-runner
+    state: directory
+    owner: runner
+    group: runner
+    mode: "0755"
+
+- name: Download and extract runner
+  ansible.builtin.unarchive:
+    src: "https://github.com/actions/runner/releases/download/v{{ runner_version }}/actions-runner-linux-x64-{{ runner_version }}.tar.gz"
+    dest: /home/runner/actions-runner
+    remote_src: true
+    owner: runner
+    group: runner
+    creates: /home/runner/actions-runner/config.sh
+
+- name: Install runner dependencies
+  ansible.builtin.command: ./bin/installdependencies.sh
+  args:
+    chdir: /home/runner/actions-runner
+  changed_when: false
+
+- name: Register runner with GitHub
+  ansible.builtin.command: >
+    ./config.sh --unattended
+    --url {{ runner_url }}
+    --token {{ runner_token }}
+    --name {{ runner_name }}
+    --labels {{ runner_labels }}
+    --replace
+  args:
+    chdir: /home/runner/actions-runner
+    creates: /home/runner/actions-runner/.runner
+  become_user: runner
+  no_log: true
+
+- name: Install runner as a service
+  ansible.builtin.command: ./svc.sh install runner
+  args:
+    chdir: /home/runner/actions-runner
+    creates: /etc/systemd/system/actions.runner.*
+
+- name: Start runner service
+  ansible.builtin.command: ./svc.sh start
+  args:
+    chdir: /home/runner/actions-runner
+  changed_when: false

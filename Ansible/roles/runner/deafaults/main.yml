@@ -1,0 +1,3 @@
+runner_url: https://github.com/Devops-End/end-to-end-DEvops
+runner_name: "{{ ansible_hostname }}"
+runner_labels: "self-hosted,azure"

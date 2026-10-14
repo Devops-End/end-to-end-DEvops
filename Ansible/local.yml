@@ -1,6 +1,8 @@
-- name: Configure runner VM
+- name: Configure project VM
   hosts: localhost
   connection: local
   become: true
   roles:
+    - base
     - docker
+    - tools

@@ -158,6 +158,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
   identity {
     type = "SystemAssigned"
   }
+  disable_password_authentication = false
+  admin_password                  = "YourStrongPassword@2026!"
 
   os_disk {
     caching              = "ReadWrite"
@@ -170,4 +172,14 @@ resource "azurerm_linux_virtual_machine" "vm" {
     sku       = "22_04-lts-gen2"
     version   = "latest"
   }
+}
+
+#this extension enables AAD SSH login for the VM, allowing users to authenticate using their Azure AD credentials.
+resource "azurerm_virtual_machine_extension" "aad_ssh"{
+  name                       = "AADSSHLoginForLinux"
+  virtual_machine_id         = azurerm_linux_virtual_machine.vm.id
+  publisher                  = "Microsoft.Azure.ActiveDirectory"
+  type                       = "AADSSHLoginForLinux"
+  type_handler_version       = "1.0"
+  auto_upgrade_minor_version = true
 }

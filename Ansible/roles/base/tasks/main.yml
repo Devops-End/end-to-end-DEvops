@@ -1,0 +1,14 @@
+- name: Install base packages
+  ansible.builtin.apt:
+    name:
+      - git
+      - curl
+      - jq
+      - unzip
+      - make
+      - python3
+      - python3-pip
+      - python3-venv
+      - postgresql-client
+    state: present
+    update_cache: true

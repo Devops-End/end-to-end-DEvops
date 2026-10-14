@@ -38,3 +38,9 @@
     name: docker
     state: started
     enabled: true
+
+- name: Let the login user run docker without sudo
+  ansible.builtin.user:
+    name: "{{ lookup('env', 'SUDO_USER') | default('azureuser', true) }}"
+    groups: docker
+    append: true

@@ -51,7 +51,7 @@
     chdir: /home/runner/actions-runner
     creates: /home/runner/actions-runner/.runner
   become_user: runner
-  no_log: true
+  no_log: false
 
 - name: Install runner as a service
   ansible.builtin.command: ./svc.sh install runner

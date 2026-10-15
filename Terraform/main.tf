@@ -3,7 +3,7 @@ resource "azurerm_resource_group" "rg" {
   location = "East US"
 }
 
-# vnet 12
+# vnet 
 resource "azurerm_virtual_network" "vnet" {
   name                = "terraform-vnet"
   location            = azurerm_resource_group.rg.location
@@ -17,6 +17,32 @@ resource "azurerm_subnet" "subnet" {
   virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = azurerm_resource_group.rg.name
   address_prefixes     = ["10.0.1.0/24"]
+}
+
+# Kubernetes subnet
+resource "azurerm_subnet" "kub"{
+  name = "KubernetesSubnet"
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  resource_group_name = azurerm_resource_group.rg.name
+  address_prefixes = ["10.0.3.0/24"]
+}
+
+#Db subnet
+resource "azurerm_subnet" "db"{
+  name = "DB_subnet"
+  resource_group_name = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes = ["10.0.4.0/24"]
+
+  delegation {
+    name = "db_delegation"   # just a label, any name works
+    service_delegation {
+      name = "Microsoft.DBforPostgreSQL/flexibleServers" # which Azure service gets the subnet
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/join/action"# permission to attach its network interface
+      ]
+    }
+  }
 }
 
 # VPN Gateway subnet
@@ -143,6 +169,13 @@ resource "azurerm_subnet_nat_gateway_association" "subnet_nat" {
   nat_gateway_id = azurerm_nat_gateway.nat_gateway.id
 }
 
+#AKS subnet -> NAT Gateway
+resource "azurerm_subnet_nat_gateway_association" "aks_subnet_nat" {
+  subnet_id      = azurerm_subnet.kub.id
+  nat_gateway_id = azurerm_nat_gateway.nat_gateway.id
+}
+
+#VM
 resource "azurerm_linux_virtual_machine" "vm" {
   name                = "terraform-vm"
   resource_group_name = azurerm_resource_group.rg.name

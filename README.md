@@ -11,16 +11,22 @@ $env:TF_VAR_db_password       = 'Db-Str0ng-Pass-2026!'
 and download conifgure thing from vpn gateway
 and connect vpn using the configuration and 
 
+1st remove old vpn key "ssh-keygen -R 10.0.1.4"
 *in terminal login into vm "az ssh vm --ip ip address"
 
 *then install git into it "sudo apt update" and install git "sudo apt install git -y"
 
 *then install Ansible "sudo apt install ansible -y"
 
-*then git clone git url
+*then git clone https://github.com/Devops-End/end-to-end-DEvops.git
 
 *then
 cd ~/end-to-end-DEvops
 git pull
 cd Ansible
-ansible-playbook -c local -i localhost, local.yml -e runner_token= new runner token AZ3M7T6XBVBC6OJGMYLZ47DK2B2DM
+ansible-playbook -c local -i localhost, local.yml -e runner_token=AZ3M7T56XFQPCITMCYWI4XLK2JAIC
+
+#access kubectl
+az login --identity
+az aks get-credentials -g terraform-rg -n terraform-aks --overwrite-existing
+kubectl get nodes 

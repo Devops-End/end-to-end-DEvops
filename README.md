@@ -24,7 +24,7 @@ and connect vpn using the configuration and
 cd ~/end-to-end-DEvops
 git pull
 cd Ansible
-ansible-playbook -c local -i localhost, local.yml -e runner_token=AZ3M7T56XFQPCITMCYWI4XLK2JAIC
+ansible-playbook -c local -i localhost, local.yml -e runner_token=AZ3M7T726Y7MD6BJZVDLXRTK2WWMW
 
 #access kubectl
 az login --identity

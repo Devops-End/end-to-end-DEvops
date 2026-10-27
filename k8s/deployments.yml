@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: falsk-deployment
+  namespace: flask
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      labels:
+        app: test
+
+spec:
+      containers:
+        - name: test-container
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+          
+          resources:
+            requests: 
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"

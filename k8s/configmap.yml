@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-config
+  namespace: flask
+data:
+  DB_HOST: "mydb.example.internal"
+  DB_PORT: "5432"
+  DB_NAME: "appdb"
+  DB_USER: "pgadmin"
+
+#before you run the test-config pod, make sure to create the secret first using the following command:
+#kubectl create secret generic test-secret --from-literal=DB_PASSWORD=mysecretpassword -

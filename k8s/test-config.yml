@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: config-test
+  namespace: flask
+spec:
+  restartPolicy: Never
+  containers:
+    - name: web
+      image: busybox:1.36
+      command: ["sh", "-c", "env | grep DB_ ; sleep 3600"]
+      envFrom:
+        - configMapRef:
+            name: test-config
+      env:
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: test-secret
+              key: DB_PASSWORD
